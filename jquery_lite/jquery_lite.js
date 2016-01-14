@@ -52,4 +52,33 @@
     }
   };
 
+  DOMNodeCollection.prototype.attr = function (attribute, value) {
+    if (this.htmlElements.length > 0) {
+      if (typeof(value) === "undefined") {
+        return this.htmlElements[0].getAttribute(attribute);
+      }
+      else {
+        this.htmlElements.forEach(function(el){
+          el.setAttribute(attribute, value);
+        });
+      }
+    }
+  };
+
+  DOMNodeCollection.prototype.addClass = function (className) {
+    this.htmlElements.forEach(function(el){
+      if (!el.classList.contains(className)) {
+        el.className += (" " + className);
+      }
+    });
+  };
+
+  DOMNodeCollection.prototype.removeClass = function (className) {
+    this.htmlElements.forEach(function(el) {
+      el.className = el.className.split(" ").filter(function (cl) {
+        return cl !== className;
+      }).join(" ");
+    });
+  };
+
 })();
