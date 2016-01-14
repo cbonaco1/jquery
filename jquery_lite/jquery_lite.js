@@ -83,9 +83,9 @@
 
   //TRAVERSAL
   DOMNodeCollection.prototype.children = function(){
-    var children = this.htmlElements.reduce(function(accum, el){
-      return accum.concat(makeArray(el.children));
-    }, []);
+    var children = flatMap(this.htmlElements, function(el) {
+        return makeArray(el.children);
+    });
 
     return new DOMNodeCollection(children);
   };
@@ -116,6 +116,19 @@
   };
 
 
+  //EVENT HANDLING
+  DOMNodeCollection.prototype.on = function(event, handler){
+    this.htmlElements.forEach(function(el){
+      //addEventListener
+      el.addEventListener(event, handler);
+    });
+  };
+
+  DOMNodeCollection.prototype.off = function(event, handler){
+    this.htmlElements.forEach(function(el){
+      el.removeEventListener(event, handler);
+    });
+  };
 
   //HELPER FUNCTIONS
   var makeArray = function(notArr){
