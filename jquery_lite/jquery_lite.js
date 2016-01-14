@@ -6,7 +6,7 @@
       return new DOMNodeCollection([arg]);
     } else {
       var elementList = document.querySelectorAll(arg);
-      elementList = Array.prototype.slice.call(elementList);
+      elementList = makeArray(elementList);
       return new DOMNodeCollection(elementList);
     }
   };
@@ -80,5 +80,53 @@
       }).join(" ");
     });
   };
+
+  //TRAVERSAL
+  DOMNodeCollection.prototype.children = function(){
+    var children = this.htmlElements.reduce(function(accum, el){
+      return accum.concat(makeArray(el.children));
+    }, []);
+
+    return new DOMNodeCollection(children);
+  };
+
+  DOMNodeCollection.prototype.parent = function(){
+    var parent = this.htmlElements.reduce(function(accum, el){
+      if (!accum.includes(el.parentElement)) {
+        accum.push(el.parentElement);
+      }
+      return accum;
+    }, []);
+
+    return new DOMNodeCollection(parent);
+  };
+
+  DOMNodeCollection.prototype.find = function(selector){
+    return flatMap(this.htmlElements, function(el){
+      return makeArray(el.querySelectorAll(selector));
+    });
+  };
+
+  DOMNodeCollection.prototype.remove = function() {
+    this.htmlElements.forEach(function(el){
+      el.remove();
+    });
+
+    this.htmlElements = [];
+  };
+
+
+
+  //HELPER FUNCTIONS
+  var makeArray = function(notArr){
+    return Array.prototype.slice.call(notArr);
+  };
+
+  var flatMap = function(arr, callback) {
+    return arr.reduce(function(accum, el){
+      return accum.concat(callback(el));
+    }, []);
+  };
+
 
 })();
