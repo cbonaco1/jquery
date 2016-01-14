@@ -137,6 +137,11 @@
   };
 
   //HELPER FUNCTIONS
+
+  var binaryExtend = function(objOne, objTwo){
+
+  };
+  
   var makeArray = function(notArr){
     return Array.prototype.slice.call(notArr);
   };
