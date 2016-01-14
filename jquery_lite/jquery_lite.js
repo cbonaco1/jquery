@@ -4,6 +4,12 @@
   var $l = window.$l = function(arg) {
     if (arg instanceof HTMLElement) {
       return new DOMNodeCollection([arg]);
+    } else if (arg instanceof Function) {
+      if (document.readyState === "complete") {
+        arg();
+      }else {
+        document.addEventListener("DOMContentLoaded", arg);
+      }
     } else {
       var elementList = document.querySelectorAll(arg);
       elementList = makeArray(elementList);
